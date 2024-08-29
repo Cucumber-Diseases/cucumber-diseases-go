@@ -96,8 +96,8 @@ func (t *CustomerTestSteps) allCustomersAreSearched(ctx context.Context) error {
 	return nil
 }
 
-func (t *CustomerTestSteps) theCustomerSabineMustermannIsSearched(ctx context.Context) error {
-	t.count = len(t.customerService.SearchCustomersByName("Sabine", "Mustermann"))
+func (t *CustomerTestSteps) theCustomerSabineMustermannIsSearched(ctx context.Context, fn, ln string) error {
+	t.count = len(t.customerService.SearchCustomersByName(fn, ln))
 	return nil
 }
 
@@ -109,14 +109,14 @@ func (t *CustomerTestSteps) theCustomerCanBeFound(ctx context.Context) error {
 	return nil
 }
 
-func (t *CustomerTestSteps) theCustomerSabineMustermannCanBeFound(ctx context.Context) error {
-	customer := t.customerService.SearchCustomer("Sabine", "Mustermann")
+func (t *CustomerTestSteps) theCustomerSabineMustermannCanBeFound(ctx context.Context, fn, ln string) error {
+	customer := t.customerService.SearchCustomer(fn, ln)
 
-	if customer.FirstName != "Sabine" {
+	if customer.FirstName != fn {
 		return fmt.Errorf("expected first name to be Sabine but got %v", customer.FirstName)
 	}
 
-	if customer.LastName != "Mustermann" {
+	if customer.LastName != ln {
 		return fmt.Errorf("expected last name to be Mustermann but got %v", customer.LastName)
 	}
 
@@ -167,9 +167,9 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Given(`there is a customer`, t.thereAreSomeCustomers)
 	sc.Given(`there are some customers`, t.thereAreSomeCustomers)
 	sc.When(`all customers are searched`, t.allCustomersAreSearched)
-	sc.When(`the customer Sabine Mustermann is searched`, t.theCustomerSabineMustermannIsSearched)
+	sc.When(`the customer (\w+) (\w+) is searched`, t.theCustomerSabineMustermannIsSearched)
 	sc.Then(`the customer can be found`, t.theCustomerCanBeFound)
-	sc.Then(`the customer Sabine Mustermann can be found`, t.theCustomerSabineMustermannCanBeFound)
+	sc.Then(`the customer (\w+) (\w+) can be found`, t.theCustomerSabineMustermannCanBeFound)
 	sc.Then(`^the number of customers found is (\d+)$`, t.theNumberOfCustomersFoundIs)
 	sc.Then(`^the second customer can be found$`, t.theSecondCustomerCanBeFound)
 	sc.Given(`^the second customer is (\w+) (\w+)$`, t.theSecondCustomerIs)
