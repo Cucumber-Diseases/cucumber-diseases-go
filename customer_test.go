@@ -11,7 +11,6 @@ import (
 
 type CustomerTestSteps struct {
 	customerService                                      *CustomerService
-	birthday                                             time.Time
 	firstName, lastName, secondFirstName, secondLastName string
 	err                                                  error
 	count                                                int
@@ -41,12 +40,6 @@ func (t *CustomerTestSteps) theCustomerFirstNameIs(ctx context.Context, fn strin
 
 func (t *CustomerTestSteps) theCustomerLastNameIs(ctx context.Context, ln string) error {
 	t.lastName = ln
-	return nil
-}
-
-func (t *CustomerTestSteps) theCustomerBirthdayIs(ctx context.Context, bd string) error {
-	const layout = "2006/01/02" // Go's reference time is Mon Jan 2 15:04:05 MST 2006
-	t.birthday, _ = time.Parse(layout, bd)
 	return nil
 }
 
@@ -197,7 +190,6 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 
 	sc.Given(`the customer first name is "(\w+)"`, t.theCustomerFirstNameIs)
 	sc.Given(`the customer last name is "(\w+)"`, t.theCustomerLastNameIs)
-	sc.Given(`the customer's birthday is (\w+)`, t.theCustomerBirthdayIs)
 	sc.Given(`the customer name is (\w*) (\w*)`, t.theCustomerNameIs)
 	sc.Given(`^the customer is created$`, t.theCustomerIsCreated)
 	sc.When(`^the customer is created$`, t.theCustomerIsCreated)

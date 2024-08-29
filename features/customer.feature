@@ -5,7 +5,6 @@ Feature: Customer
     Scenario: Should successfully create new customer
       Given the customer first name is "Max"
       And the customer last name is "Mustermann"
-      And the customer's birthday is 2000/03/19
       When the customer is created
       Then the customer creation should be successful
 
