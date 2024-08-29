@@ -88,12 +88,6 @@ func (t *CustomerTestSteps) noCustomersExist(ctx context.Context) error {
 	return nil
 }
 
-func (t *CustomerTestSteps) thereIsACustomer(ctx context.Context, table *godog.Table) error {
-	row := table.Rows[0]
-	t.customerService.AddCustomer(row.Cells[0].Value, row.Cells[1].Value, DEFAULT_BIRTHDAY)
-	return nil
-}
-
 func (t *CustomerTestSteps) thereAreSomeCustomers(ctx context.Context, table *godog.Table) error {
 	for i, row := range table.Rows {
 		if i == 0 {
@@ -192,7 +186,7 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Then(`the second customer creation should fail`, t.theSecondCustomerCreationShouldFail)
 	sc.Given(`there are no customers`, t.thereAreNoCustomers)
 	sc.Given(`no customers exist`, t.noCustomersExist)
-	sc.Given(`there is a customer`, t.thereIsACustomer)
+	sc.Given(`there is a customer`, t.thereAreSomeCustomers)
 	sc.Given(`there are some customers`, t.thereAreSomeCustomers)
 	sc.When(`all customers are searched`, t.allCustomersAreSearched)
 	sc.When(`the customer Sabine Mustermann is searched`, t.theCustomerSabineMustermannIsSearched)

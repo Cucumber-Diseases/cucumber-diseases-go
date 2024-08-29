@@ -47,7 +47,8 @@ Feature: Customer
 
     Scenario: Should find an existing customer
       Given there is a customer
-        | Sabine | Mustermann |
+        | firstname | lastname |
+        | Sabine | Mustermann  |
       Then the customer Sabine Mustermann can be found
 
     Scenario: Should find customers by name
