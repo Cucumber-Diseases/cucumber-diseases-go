@@ -67,6 +67,9 @@ func (t *CustomerTestSteps) anInvalidCustomerIsCreated(ctx context.Context) erro
 }
 
 func (t *CustomerTestSteps) theCustomerCreationShouldBeSuccessful(ctx context.Context) error {
+	if t.err != nil {
+		return fmt.Errorf("expected no error but got %v", t.err)
+	}
 	return nil
 }
 
