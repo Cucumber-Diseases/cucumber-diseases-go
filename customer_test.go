@@ -33,16 +33,6 @@ func TestFeatures(t *testing.T) {
 	}
 }
 
-func (t *CustomerTestSteps) theCustomerFirstNameIs(ctx context.Context, fn string) error {
-	t.firstName = fn
-	return nil
-}
-
-func (t *CustomerTestSteps) theCustomerLastNameIs(ctx context.Context, ln string) error {
-	t.lastName = ln
-	return nil
-}
-
 func (t *CustomerTestSteps) theCustomerNameIs(ctx context.Context, fn, ln string) error {
 	t.firstName = fn
 	t.lastName = ln
@@ -188,8 +178,6 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 		count:           0,
 	}
 
-	sc.Given(`the customer first name is "(\w+)"`, t.theCustomerFirstNameIs)
-	sc.Given(`the customer last name is "(\w+)"`, t.theCustomerLastNameIs)
 	sc.Given(`the customer name is (\w*) (\w*)`, t.theCustomerNameIs)
 	sc.Given(`^the customer is created$`, t.theCustomerIsCreated)
 	sc.When(`^the customer is created$`, t.theCustomerIsCreated)

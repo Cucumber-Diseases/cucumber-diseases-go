@@ -3,8 +3,7 @@ Feature: Customer
   Rule: Create a customer with user name
 
     Scenario: Should successfully create new customer
-      Given the customer first name is "Max"
-      And the customer last name is "Mustermann"
+      Given the customer name is Max Mustermann
       When the customer is created
       Then the customer creation should be successful
 
