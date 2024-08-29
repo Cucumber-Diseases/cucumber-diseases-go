@@ -8,8 +8,7 @@ Feature: Customer
       Then the customer creation should be successful
 
     Scenario: Should find newly created customer
-      Given there are no customers
-      And the customer name is Rose Smith
+      Given the customer name is Rose Smith
       When the customer is created
       And all customers are searched
       Then the number of customers found is 1
@@ -58,7 +57,6 @@ Feature: Customer
       Then the number of customers found is 1
 
     Scenario: Cannot find customer that does not exist
-      Given there are no customers
       When all customers are searched
       Then the number of customers found is 0
 
