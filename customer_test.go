@@ -73,6 +73,15 @@ func (t *CustomerTestSteps) theCustomerCreationShouldFail(ctx context.Context) e
 }
 
 func (t *CustomerTestSteps) theSecondCustomerCreationShouldFail(ctx context.Context) error {
+	err := t.customerService.AddCustomer(t.secondFirstName, t.secondLastName, DEFAULT_BIRTHDAY)
+	if err == nil {
+		return fmt.Errorf("expected error but got nil")
+	}
+
+	if err.Error() != "customer already exists" {
+		return fmt.Errorf("expected 'customer already exists' error but got '%s'", err.Error())
+	}
+
 	return nil
 }
 
