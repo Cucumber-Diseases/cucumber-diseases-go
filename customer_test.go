@@ -44,11 +44,6 @@ func (t *CustomerTestSteps) theCustomerIsCreated(ctx context.Context) error {
 	return nil
 }
 
-func (t *CustomerTestSteps) anInvalidCustomerIsCreated(ctx context.Context) error {
-	t.err = t.customerService.AddCustomer(t.firstName, t.lastName, DEFAULT_BIRTHDAY)
-	return nil
-}
-
 func (t *CustomerTestSteps) theCustomerCreationShouldBeSuccessful(ctx context.Context) error {
 	if t.err != nil {
 		return fmt.Errorf("expected no error but got %v", t.err)
@@ -190,7 +185,7 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Given(`the customer name is (\w*) (\w*)`, t.theCustomerNameIs)
 	sc.Given(`^the customer is created$`, t.theCustomerIsCreated)
 	sc.When(`^the customer is created$`, t.theCustomerIsCreated)
-	sc.When(`an invalid customer is created`, t.anInvalidCustomerIsCreated)
+	sc.When(`an invalid customer is created`, t.theCustomerIsCreated)
 	sc.When(`the second customer is created`, t.theCustomerIsCreated)
 	sc.Then(`the customer creation should be successful`, t.theCustomerCreationShouldBeSuccessful)
 	sc.Then(`the customer creation should fail`, t.theCustomerCreationShouldFail)
