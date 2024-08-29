@@ -52,6 +52,7 @@ func (t *CustomerTestSteps) theCustomerCreationShouldBeSuccessful(ctx context.Co
 }
 
 func (t *CustomerTestSteps) theSecondCustomerIsCreated(ctx context.Context) error {
+	t.err = t.customerService.AddCustomer(t.secondFirstName, t.secondLastName, DEFAULT_BIRTHDAY)
 	return nil
 }
 
@@ -68,13 +69,12 @@ func (t *CustomerTestSteps) theCustomerCreationShouldFail(ctx context.Context) e
 }
 
 func (t *CustomerTestSteps) theSecondCustomerCreationShouldFail(ctx context.Context) error {
-	err := t.customerService.AddCustomer(t.secondFirstName, t.secondLastName, DEFAULT_BIRTHDAY)
-	if err == nil {
+	if t.err == nil {
 		return fmt.Errorf("expected error but got nil")
 	}
 
-	if err.Error() != "customer already exists" {
-		return fmt.Errorf("expected 'customer already exists' error but got '%s'", err.Error())
+	if t.err.Error() != "customer already exists" {
+		return fmt.Errorf("expected 'customer already exists' error but got '%s'", t.err.Error())
 	}
 
 	return nil
@@ -109,7 +109,7 @@ func (t *CustomerTestSteps) theCustomerCanBeFound(ctx context.Context) error {
 	return nil
 }
 
-func (t *CustomerTestSteps) theCustomerSabineMustermannCanBeFound(ctx context.Context, fn, ln string) error {
+func (t *CustomerTestSteps) theCustomerFnLnCanBeFound(ctx context.Context, fn, ln string) error {
 	customer := t.customerService.SearchCustomer(fn, ln)
 
 	if customer.FirstName != fn {
@@ -126,15 +126,6 @@ func (t *CustomerTestSteps) theCustomerSabineMustermannCanBeFound(ctx context.Co
 func (t *CustomerTestSteps) theNumberOfCustomersFoundIs(ctx context.Context, expectedCount int) error {
 	if t.count != expectedCount {
 		return fmt.Errorf("expected %d customers to be found but got %d", expectedCount, t.count)
-	}
-	return nil
-}
-
-func (t *CustomerTestSteps) theSecondCustomerCanBeFound(ctx context.Context) error {
-	t.customerService.AddCustomer(t.secondFirstName, t.secondLastName, DEFAULT_BIRTHDAY)
-	customer := t.customerService.SearchCustomer(t.secondFirstName, t.secondLastName)
-	if customer == nil {
-		return fmt.Errorf("expected customer to be found but got nil")
 	}
 	return nil
 }
@@ -169,9 +160,8 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.When(`all customers are searched`, t.allCustomersAreSearched)
 	sc.When(`the customer (\w+) (\w+) is searched`, t.theCustomerSabineMustermannIsSearched)
 	sc.Then(`the customer can be found`, t.theCustomerCanBeFound)
-	sc.Then(`the customer (\w+) (\w+) can be found`, t.theCustomerSabineMustermannCanBeFound)
+	sc.Then(`the customer (\w+) (\w+) can be found`, t.theCustomerFnLnCanBeFound)
 	sc.Then(`^the number of customers found is (\d+)$`, t.theNumberOfCustomersFoundIs)
-	sc.Then(`^the second customer can be found$`, t.theSecondCustomerCanBeFound)
 	sc.Given(`^the second customer is (\w+) (\w+)$`, t.theSecondCustomerIs)
 
 }
