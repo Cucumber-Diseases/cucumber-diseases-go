@@ -3,21 +3,18 @@ Feature: Customer
   Rule: Create a customer with user name
 
     Scenario: Should successfully create new customer
-      Given the customer name is Max Mustermann
-      When the customer is created
+      When the customer Max Mustermann is created
       Then the customer creation should be successful
 
     Scenario: Should find newly created customer
-      Given the customer name is Rose Smith
-      When the customer is created
-      Then the customer can be found
+      When the customer Rose Smith is created
+      Then the customer Rose Smith can be found
 
 
   Rule: The first name and last name must be provided
 
     Scenario Outline: Cannot create customer without first or lastname
-      Given the customer name is <firstname> <lastname>
-      When an invalid customer is created
+      When an invalid customer <firstname> <lastname> is created
       Then the customer creation should fail
       Examples:
         | description    | firstname | lastname   |
@@ -29,17 +26,13 @@ Feature: Customer
   Rule: Customer name must be unique
 
     Scenario: Should be able to create two customer with different names
-      Given the customer name is Max Mustermann
-      When the customer is created
-      Given the second customer is Sabine Mustermann
-      When the second customer is created
+      When the customer Max Mustermann is created
+      When the second customer Sabine Mustermann is created
       Then the customer Sabine Mustermann can be found
 
     Scenario: Cannot create two customer with the same name
-      Given the customer name is Max Mustermann
-      And the second customer is Max Mustermann
-      When the customer is created
-      And the second customer is created
+      Given the customer Max Mustermann is created
+      When the second customer Max Mustermann is created
       Then the second customer creation should fail
 
 
@@ -52,8 +45,7 @@ Feature: Customer
       Then the customer Sabine Mustermann can be found
 
     Scenario: Should find customers by name
-      Given the customer name is Sabine Mustermann
-      And the customer is created
+      Given the customer Sabine Mustermann is created
       When the customer Sabine Mustermann is searched
       Then the number of customers found is 1
 

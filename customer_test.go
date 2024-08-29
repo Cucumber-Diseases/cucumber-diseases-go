@@ -10,10 +10,9 @@ import (
 )
 
 type CustomerTestSteps struct {
-	customerService                                      *CustomerService
-	firstName, lastName, secondFirstName, secondLastName string
-	err                                                  error
-	count                                                int
+	customerService *CustomerService
+	err             error
+	count           int
 }
 
 var DEFAULT_BIRTHDAY = time.Date(1995, time.January, 1, 0, 0, 0, 0, time.UTC)
@@ -33,14 +32,8 @@ func TestFeatures(t *testing.T) {
 	}
 }
 
-func (t *CustomerTestSteps) theCustomerNameIs(ctx context.Context, fn, ln string) error {
-	t.firstName = fn
-	t.lastName = ln
-	return nil
-}
-
-func (t *CustomerTestSteps) theCustomerIsCreated(ctx context.Context) error {
-	t.err = t.customerService.AddCustomer(t.firstName, t.lastName, DEFAULT_BIRTHDAY)
+func (t *CustomerTestSteps) theCustomerIsCreated(ctx context.Context, fn, ln string) error {
+	t.err = t.customerService.AddCustomer(fn, ln, DEFAULT_BIRTHDAY)
 	return nil
 }
 
@@ -48,11 +41,6 @@ func (t *CustomerTestSteps) theCustomerCreationShouldBeSuccessful(ctx context.Co
 	if t.err != nil {
 		return fmt.Errorf("expected no error but got %v", t.err)
 	}
-	return nil
-}
-
-func (t *CustomerTestSteps) theSecondCustomerIsCreated(ctx context.Context) error {
-	t.err = t.customerService.AddCustomer(t.secondFirstName, t.secondLastName, DEFAULT_BIRTHDAY)
 	return nil
 }
 
@@ -101,14 +89,6 @@ func (t *CustomerTestSteps) theCustomerSabineMustermannIsSearched(ctx context.Co
 	return nil
 }
 
-func (t *CustomerTestSteps) theCustomerCanBeFound(ctx context.Context) error {
-	customer := t.customerService.SearchCustomer(t.firstName, t.lastName)
-	if customer == nil {
-		return fmt.Errorf("expected customer to be found but got nil")
-	}
-	return nil
-}
-
 func (t *CustomerTestSteps) theCustomerFnLnCanBeFound(ctx context.Context, fn, ln string) error {
 	customer := t.customerService.SearchCustomer(fn, ln)
 
@@ -130,28 +110,18 @@ func (t *CustomerTestSteps) theNumberOfCustomersFoundIs(ctx context.Context, exp
 	return nil
 }
 
-func (t *CustomerTestSteps) theSecondCustomerIs(ctx context.Context, fn, ln string) error {
-	t.secondFirstName = fn
-	t.secondLastName = ln
-	return nil
-}
-
 func InitializeScenario(sc *godog.ScenarioContext) {
 
 	t := CustomerTestSteps{
 		customerService: NewCustomerService(),
-		firstName:       "",
-		lastName:        "",
-		secondFirstName: "",
-		secondLastName:  "",
+		err:             nil,
 		count:           0,
 	}
 
-	sc.Given(`the customer name is (\w*) (\w*)`, t.theCustomerNameIs)
-	sc.Given(`^the customer is created$`, t.theCustomerIsCreated)
-	sc.When(`^the customer is created$`, t.theCustomerIsCreated)
-	sc.When(`an invalid customer is created`, t.theCustomerIsCreated)
-	sc.When(`the second customer is created`, t.theSecondCustomerIsCreated)
+	sc.Given(`^the customer (\w+) (\w+) is created$`, t.theCustomerIsCreated)
+	sc.When(`^the customer (\w+) (\w+) is created$`, t.theCustomerIsCreated)
+	sc.When(`an invalid customer (\w*) (\w*) is created`, t.theCustomerIsCreated)
+	sc.When(`the second customer (\w+) (\w+) is created`, t.theCustomerIsCreated)
 	sc.Then(`the customer creation should be successful`, t.theCustomerCreationShouldBeSuccessful)
 	sc.Then(`the customer creation should fail`, t.theCustomerCreationShouldFail)
 	sc.Then(`the second customer creation should fail`, t.theSecondCustomerCreationShouldFail)
@@ -159,9 +129,7 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Given(`there are some customers`, t.thereAreSomeCustomers)
 	sc.When(`all customers are searched`, t.allCustomersAreSearched)
 	sc.When(`the customer (\w+) (\w+) is searched`, t.theCustomerSabineMustermannIsSearched)
-	sc.Then(`the customer can be found`, t.theCustomerCanBeFound)
 	sc.Then(`the customer (\w+) (\w+) can be found`, t.theCustomerFnLnCanBeFound)
 	sc.Then(`^the number of customers found is (\d+)$`, t.theNumberOfCustomersFoundIs)
-	sc.Given(`^the second customer is (\w+) (\w+)$`, t.theSecondCustomerIs)
 
 }
