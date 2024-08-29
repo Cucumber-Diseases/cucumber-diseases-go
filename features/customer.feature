@@ -33,7 +33,7 @@ Feature: Customer
       When the customer is created
       Given the second customer is Sabine Mustermann
       When the second customer is created
-      Then the second customer can be found
+      Then the customer Sabine Mustermann can be found
 
     Scenario: Cannot create two customer with the same name
       Given the customer name is Max Mustermann
